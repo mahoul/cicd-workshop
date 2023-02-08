@@ -229,38 +229,15 @@ jobs:
               -auto-approve
 workflows:
   test_scan_deploy:
-      jobs:
-        - build_and_test
-        - dependency_vulnerability_scan:
-            context:
-              - CICD_WORKSHOP_SNYK
-        - build_docker_image:
-            context:
-              - CICD_WORKSHOP_DOCKER
-              - CICD_WORKSHOP_SNYK
-        - create_do_k8s_cluster:
-            requires:
-              - build_docker_image
-            context:
-              - CICD_WORKSHOP_DIGITAL_OCEAN
-              - CICD_WORKSHOP_TERRAFORM_CLOUD
-        - deploy_to_k8s:
-            requires:
-              - create_do_k8s_cluster
-            context:
-              - CICD_WORKSHOP_DOCKER
-              - CICD_WORKSHOP_DIGITAL_OCEAN
-              - CICD_WORKSHOP_TERRAFORM_CLOUD
-        - smoketest_k8s_deployment:
-            requires:
-              - deploy_to_k8s
-        - approve_destroy:
-            type: approval
-            requires:
-              - smoketest_k8s_deployment
-        - destroy_k8s_cluster:
-            requires:
-              - approve_destroy
-            context:
-              - CICD_WORKSHOP_DIGITAL_OCEAN
-              - CICD_WORKSHOP_TERRAFORM_CLOUD
+    jobs:
+      - build_and_test
+      - dependency_vulnerability_scan:
+          context:
+            - CICD_WORKSHOP_SNYK
+      - build_docker_image:
+          context:
+            - CICD_WORKSHOP_DOCKER
+            - CICD_WORKSHOP_SNYK
+
+
+
